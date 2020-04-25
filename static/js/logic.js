@@ -56,14 +56,11 @@ d3.json(USGSpath, function(geoData){
             return (Math.abs(curr - quakeMag) < Math.abs(prev-quakeMag) ? curr: prev);
         });
 
-        
-        
-        
-
         let quakeMarker = L.circle(quakeCoordinate, {
-            radius: quakeMag * 13000,
+            radius: quakeMag * 15000,
             opacity: 0,
-            fillColor: colorPicker(closestMag) 
+            fillColor: colorPicker(closestMag),
+            fillOpactiy: 1.0
         })
         .bindPopup(`<h1>Magnitude: ${quakeMag}</h1><h1>Time: ${quakeTime}</h1>`) //popup details
         .addTo(map);
@@ -78,10 +75,14 @@ legend.onAdd = function(map) {
     let div = L.DomUtil.create("div", "legend"),
         magArray = [0, 1, 2, 3, 4, 5],
         labels = [];
+    // append a color box and html text for each magnitude value 
+    magArray.slice(0, 5).forEach(value => {
+        div.innerHTML += `<div><i class = 'legend-color-box' style = 'background: ${colorPicker(value)}; width: 20px; float: left;'></i>
+        <h4>Magnitude ${value} - ${value+1}</h4></div>`;
+    })  
 
-    magArray.forEach(value => {
-        div.innerHTML += `<i style = 'background: ${colorPicker(value)}'></i> <h3>Magnitude ${value} - ${value+1}</h3>`;
-    })    
+    div.innerHTML += `<div><i class = 'legend-color-box' style = 'background: ${colorPicker(5)}; width: 20px; float: left;'></i>
+        <h4>Magnitude 5+</h4></div>`;  
     return div;
 };
 legend.addTo(map);
